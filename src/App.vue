@@ -1,19 +1,21 @@
 <template>
-  <v-app>
+  <q-layout view="hHh lpR fFf">
     <NavBar></NavBar>
-    <v-main>
+    <q-page-container>
       <router-view />
-    </v-main>
-    <v-dialog v-model="errorDialog" max-width="500">
-      <v-card>
-        <v-card-title class="headline">Erreur</v-card-title>
-        <v-card-text>{{ errorMessage }}</v-card-text>
-        <v-card-actions>
-          <v-btn color="error" @click="clearError">Fermer</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-app>
+    </q-page-container>
+    <q-dialog v-model="errorDialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Erreur</div>
+        </q-card-section>
+        <q-card-section>{{ errorMessage }}</q-card-section>
+        <q-card-actions align="right">
+          <q-btn color="negative" flat @click="clearError">Fermer</q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  </q-layout>
 </template>
 
 <script setup>

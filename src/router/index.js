@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { getActivePinia } from 'pinia'
 import HomeView from "../views/HomeView.vue";
 import OrganisationsView from "../views/OrganisationsView.vue";
 import OrganisationView from "@/views/OrganisationView.vue";
@@ -7,7 +8,6 @@ import TeamsView from "@/views/TeamsView.vue";
 import AuthentificationView from "@/views/AuthentificationView.vue";
 import LoginView from "@/views/LoginView.vue";
 import RegisterView from "@/views/RegisterView.vue";
-import store from "@/store";
 
 const routes = [
     {
@@ -57,9 +57,12 @@ const router = createRouter({
     routes,
 });
 
-// Exemple de navigation guard si nécessaire
 router.beforeEach((to, from, next) => {
-    if (to.name !== "login" && to.name !== "register" && !store.state.auth.isAuthenticated) {
+    // Récupérer le pinia actif et accéder au store
+    const pinia = getActivePinia();
+    const isAuthenticated = pinia ? pinia.state.value.auth.isAuthenticated : false;
+    
+    if (to.name !== "login" && to.name !== "register" && !isAuthenticated) {
         next({ name: "login" });
     } else {
         next();

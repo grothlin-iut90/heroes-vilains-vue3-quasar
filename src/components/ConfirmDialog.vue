@@ -35,25 +35,18 @@ export default {
 
 <template>
   <div class="ConfirmDialog">
-    <v-dialog v-model="dialog" max-width="290">
-      <v-card>
-        <v-card-title class="headline">
-          {{ title }}
-        </v-card-title>
-        <v-card-text>
-          {{ message }}
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
-            Annuler
-          </v-btn>
-          <v-btn color="blue darken-1" text @click="confirm">
-            Continuer
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+    <q-dialog v-model="dialog">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">{{ title }}</div>
+        </q-card-section>
+        <q-card-section>{{ message }}</q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="Annuler" color="primary" @click="dialog = false" />
+          <q-btn flat label="Continuer" color="primary" @click="confirm" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 

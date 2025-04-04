@@ -11,11 +11,9 @@ export default {
 </script>
 
 <template>
-  <v-list>
-    <v-list-item v-for="organisation in organisationNames" :key="organisation._id">
-      <v-list-item-content>
-        <v-list-item-title>{{ organisation.name }}</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list>
+  <q-list>
+    <q-item v-for="organisation in organisationNames" :key="organisation._id">
+      <q-item-section>{{ organisation.name }}</q-item-section>
+    </q-item>
+  </q-list>
 </template>

@@ -11,11 +11,9 @@ export default {
 </script>
 
 <template>
-  <v-list>
-    <v-list-item v-for="team in teams" :key="team._id">
-      <v-list-item-content>
-        <v-list-item-title>{{ team.name }}</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list>
+  <q-list>
+    <q-item v-for="team in teams" :key="team._id">
+      <q-item-section>{{ team.name }}</q-item-section>
+    </q-item>
+  </q-list>
 </template>

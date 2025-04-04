@@ -1,51 +1,22 @@
 <template>
-  <v-container class="OrganisationView">
+  <q-page>
     <h1>Organisation</h1>
     <div v-if="!currentOrganisation">
       <h2>Aucune organisation sélectionnée</h2>
-      <v-btn color="success" @click="router.push('/organisations')">OK</v-btn>
+      <q-btn color="positive" @click="router.push('/organisations')">OK</q-btn>
     </div>
-    <div v-else>
-      <v-simple-table>
-        <template v-slot:default>
-          <thead>
-            <tr>
-              <th class="text-left">Id</th>
-              <th class="text-left">Nom</th>
-              <th class="text-left">Secret</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{{ currentOrganisation._id }}</td>
-              <td>{{ currentOrganisation.name }}</td>
-              <td>{{ currentOrganisation.secret }}</td>
-            </tr>
-          </tbody>
-          <thead>
-            <tr>
-              <th class="text-left" colspan="2">
-                Équipes
-                <v-btn color="success" class="ma-3" @click="openAddDialog">Ajouter</v-btn>
-              </th>
-              <th class="text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="team in currentOrganisation.teams" :key="team._id">
-              <td colspan="2">{{ team.name }}</td>
-              <td>
-                <v-btn color="warning" class="ma-3" @click="selectTeam(team)">Modifier</v-btn>
-                <v-btn color="error" @click="openConfirmDialog(team)">Supprimer</v-btn>
-              </td>
-            </tr>
-          </tbody>
-        </template>
-      </v-simple-table>
-      <AddTeamDialog ref="addTeamDialogRef" />
-      <ConfirmDialog ref="confirmDialogRef" />
-    </div>
-  </v-container>
+    <q-table v-else :rows="currentOrganisation.teams" :columns="columns" row-key="_id">
+      <template v-slot:top>
+        <q-btn color="positive" @click="openAddDialog">Ajouter</q-btn>
+      </template>
+      <template v-slot:body-cell-actions="props">
+        <q-btn color="warning" @click="selectTeam(props.row)">Modifier</q-btn>
+        <q-btn color="negative" @click="openConfirmDialog(props.row)">Supprimer</q-btn>
+      </template>
+    </q-table>
+    <AddTeamDialog ref="addTeamDialogRef" />
+    <ConfirmDialog ref="confirmDialogRef" />
+  </q-page>
 </template>
 
 <script setup>
@@ -60,10 +31,13 @@ const generalStore = useGeneralStore();
 const addTeamDialogRef = ref(null);
 const confirmDialogRef = ref(null);
 
-// Computed properties
 const currentOrganisation = computed(() => generalStore.CurrentOrganisation);
 
-// Methods
+const columns = [
+  { name: "name", label: "Nom", field: "name" },
+  { name: "actions", label: "Actions", align: "right" },
+];
+
 const openAddDialog = () => {
   addTeamDialogRef.value.displayDialog();
 };

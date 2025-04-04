@@ -1,18 +1,18 @@
 <script>
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import { useOrganisationPasswordStore } from "@/store/modules/secret";
 
 export default {
   name: "NavBar",
   setup() {
-    const store = useStore();
     const drawer = ref(false);
     const showPassword = ref(false);
+    const organisationPasswordStore = useOrganisationPasswordStore();
 
-    const organisationPassword = computed(() => store.state.secret.OrganisationPassword);
+    const organisationPassword = computed(() => organisationPasswordStore.OrganisationPassword);
 
     const updateSecret = (value) => {
-      store.dispatch("secret/setOrganisationPassword", value);
+      organisationPasswordStore.setOrganisationPassword(value);
     };
 
     return {
@@ -26,49 +26,37 @@ export default {
 </script>
 
 <template>
-  <div class="nav-bar">
-    <v-navigation-drawer v-model="drawer" app>
-      <v-list>
-        <v-list-item link>
-          <v-list-item-content>
-            <v-col cols="2">
-              <v-icon>mdi-domain</v-icon>
-            </v-col>
-            <v-col cols="3">
-              <router-link to="/organisations">Organisations</router-link>
-            </v-col>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-content>
-            <v-col cols="2">
-              <v-icon>mdi-account-group</v-icon>
-            </v-col>
-            <v-col cols="3">
-              <router-link to="/teams">Équipes</router-link>
-            </v-col>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+  <q-layout-drawer v-model="drawer" show-if-above>
+    <q-list>
+      <q-item clickable v-ripple to="/organisations">
+        <q-item-section avatar>
+          <q-icon name="domain" />
+        </q-item-section>
+        <q-item-section>Organisations</q-item-section>
+      </q-item>
+      <q-item clickable v-ripple to="/teams">
+        <q-item-section avatar>
+          <q-icon name="group" />
+        </q-item-section>
+        <q-item-section>Équipes</q-item-section>
+      </q-item>
+    </q-list>
+  </q-layout-drawer>
 
-    <v-app-bar app>
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>HeroesAndVilains</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-text-field
-        :value="organisationPassword"
-        @input="updateSecret"
+  <q-header>
+    <q-toolbar>
+      <q-btn flat round dense icon="menu" @click="drawer = !drawer" />
+      <q-toolbar-title>HeroesAndVilains</q-toolbar-title>
+      <q-input
+        v-model="organisationPassword"
         label="Votre phrase secrète"
-        class="pt-5"
-        :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-        :type="showPassword ? 'text' : 'password'"
+        type="password"
+        :append="showPassword ? 'visibility' : 'visibility_off'"
         @click:append="showPassword = !showPassword"
+        dense
+        outlined
       />
-      <v-spacer />
-      <v-btn>Se connecter</v-btn>
-    </v-app-bar>
-  </div>
+      <q-btn label="Se connecter" />
+    </q-toolbar>
+  </q-header>
 </template>
-
-<style scoped></style>

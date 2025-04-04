@@ -27,18 +27,27 @@ export default {
 </script>
 
 <template>
-  <v-dialog v-model="dialog" max-width="500">
-    <v-card>
-      <v-card-title>
-        <span class="headline">Créer une équipe</span>
-      </v-card-title>
-      <v-card-text>
-        <v-text-field v-model="teamName" label="Nom de l'équipe" required />
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="error" @click="dialog = false">Annuler</v-btn>
-        <v-btn color="success" @click="createTeam">Créer</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <q-dialog v-model="dialog">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Créer une organisation</div>
+      </q-card-section>
+      <q-card-section>
+        <q-input
+          v-model="organisationName"
+          label="Nom de l'organisation"
+          filled
+        />
+      </q-card-section>
+      <q-card-actions align="right">
+        <q-btn flat label="Annuler" color="negative" @click="dialog = false" />
+        <q-btn
+          flat
+          label="Créer"
+          color="positive"
+          @click="createOrganisation"
+        />
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>

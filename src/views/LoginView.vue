@@ -1,13 +1,13 @@
 <template>
-  <v-container>
+  <q-page>
     <h1>Login</h1>
-    <v-form ref="form" v-model="valid">
-      <v-text-field v-model="loginInput" label="Login" required></v-text-field>
-      <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
-      <v-btn :disabled="!valid" @click="submit">Login</v-btn>
-      <v-btn @click="router.push('/register')">Register</v-btn>
-    </v-form>
-  </v-container>
+    <q-form ref="form" v-model="valid">
+      <q-input v-model="loginInput" label="Login" filled />
+      <q-input v-model="password" label="Password" type="password" filled />
+      <q-btn :disable="!valid" @click="submit">Login</q-btn>
+      <q-btn @click="router.push('/register')">Register</q-btn>
+    </q-form>
+  </q-page>
 </template>
 
 <script setup>

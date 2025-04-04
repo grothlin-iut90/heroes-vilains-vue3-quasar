@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-  <v-dialog v-model="dialog" max-width="500">
+  <q-dialog v-model="dialog">
     <EditHero :hero="hero" @cancel="dialog = false" @valid="saveHero" />
-  </v-dialog>
+  </q-dialog>
 </template>

@@ -1,12 +1,10 @@
 <template>
-  <v-container>
+  <q-page>
     <h1>Teams</h1>
-
-    <v-btn color="primary" @click="newTeam" class="mb-4">Ajouter</v-btn>
-    <TeamsList :Teams="Teams"></TeamsList>
-
+    <q-btn color="primary" @click="newTeam" class="mb-4">Ajouter</q-btn>
+    <TeamsList :teams="Teams" />
     <NewTeamDialog ref="newTeamDialogRef" />
-  </v-container>
+  </q-page>
 </template>
 
 <script setup>
@@ -18,15 +16,12 @@ import { useGeneralStore } from "@/store/modules/general";
 const generalStore = useGeneralStore();
 const newTeamDialogRef = ref(null);
 
-// Computed properties
 const Teams = computed(() => generalStore.Teams);
 
-// Methods
 const newTeam = () => {
   newTeamDialogRef.value.displayDialog();
 };
 
-// Lifecycle hooks
 onMounted(() => {
   generalStore.getTeams();
 });

@@ -37,17 +37,17 @@ export default {
 </script>
 
 <template>
-  <v-card>
-    <v-card-title>
-      <span class="headline">Modifier un héros</span>
-    </v-card-title>
-    <v-card-text>
-      <v-text-field v-model="localHero.publicName" label="Nom public" required />
-      <v-text-field v-model="localHero.realName" label="Nom réel" required />
-    </v-card-text>
-    <v-card-actions>
-      <v-btn color="error" @click="cancel">Annuler</v-btn>
-      <v-btn color="success" @click="save">Enregistrer</v-btn>
-    </v-card-actions>
-  </v-card>
+  <q-card>
+    <q-card-section>
+      <div class="text-h6">Modifier un héros</div>
+    </q-card-section>
+    <q-card-section>
+      <q-input v-model="localHero.publicName" label="Nom public" filled />
+      <q-input v-model="localHero.realName" label="Nom réel" filled />
+    </q-card-section>
+    <q-card-actions align="right">
+      <q-btn flat label="Annuler" color="negative" @click="cancel" />
+      <q-btn flat label="Enregistrer" color="positive" @click="save" />
+    </q-card-actions>
+  </q-card>
 </template>
