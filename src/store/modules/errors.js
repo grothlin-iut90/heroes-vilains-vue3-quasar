@@ -1,22 +1,25 @@
-export default {
-    namespaced: true,
-    state: () => ({
-        errorMessage: null,
-    }),
-    mutations: {
-        setErrorMessage(state, message) {
-            state.errorMessage = message;
-        },
-        clearErrorMessage(state) {
-            state.errorMessage = null;
-        },
+import { defineStore } from 'pinia';
+
+export const useErrorStore = defineStore('error', {
+  state: () => ({
+    errorMessage: null,
+  }),
+  
+  actions: {
+    setErrorMessage(message) {
+      this.errorMessage = message;
     },
-    actions: {
-        triggerError({ commit }, message) {
-            commit("setErrorMessage", message);
-        },
-        clearError({ commit }) {
-            commit("clearErrorMessage");
-        },
+    
+    clearErrorMessage() {
+      this.errorMessage = null;
     },
-};
+    
+    triggerError(message) {
+      this.setErrorMessage(message);
+    },
+    
+    clearError() {
+      this.clearErrorMessage();
+    },
+  },
+});

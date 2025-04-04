@@ -1,25 +1,3 @@
-<script>
-import { useStore } from "vuex";
-import { ref } from "vue";
-
-export default {
-  name: "AuthentificationView",
-  setup() {
-    const store = useStore();
-    const secretPhrase = ref("");
-
-    const setOrganisationPassword = () => {
-      store.dispatch("setOrganisationPassword", secretPhrase.value);
-    };
-
-    return {
-      secretPhrase,
-      setOrganisationPassword,
-    };
-  },
-};
-</script>
-
 <template>
   <div class="AuthentificationView">
     <h1>Authentification</h1>
@@ -28,3 +6,15 @@ export default {
     <button @click="setOrganisationPassword">Valider</button>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useOrganisationPasswordStore } from "@/store/modules/secret";
+
+const secretPhrase = ref("");
+const organisationPasswordStore = useOrganisationPasswordStore();
+
+const setOrganisationPassword = () => {
+  organisationPasswordStore.setOrganisationPassword(secretPhrase.value);
+};
+</script>

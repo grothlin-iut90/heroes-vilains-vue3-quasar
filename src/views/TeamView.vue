@@ -2,7 +2,7 @@
   <div class="TeamView">
     <div v-if="!CurrentTeam">
       <h2>Aucune équipe sélectionnée</h2>
-      <v-btn color="success" @click="$router.push('/organisations')">OK</v-btn>
+      <v-btn color="success" @click="router.push('/organisations')">OK</v-btn>
     </div>
     <v-container v-else>
       <v-simple-table>
@@ -91,73 +91,70 @@
         </template>
       </v-simple-table>
 
-      <AddHeroDialog ref="AddHeroDialog" />
+      <AddHeroDialog ref="addHeroDialogRef" />
 
       <EditHeroDialog
         :hero="selectedHero"
-        ref="EditHeroDialog"
+        ref="editHeroDialogRef"
         @valid="update"
       />
 
-      <ConfirmDialog ref="ConfirmDialog" />
+      <ConfirmDialog ref="confirmDialogRef" />
     </v-container>
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed } from "vue";
-import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+import { useGeneralStore } from "@/store/modules/general";
 import AddHeroDialog from "@/components/AddHeroDialog.vue";
 import ConfirmDialog from "@/components/ConfirmDialog.vue";
 import EditHeroDialog from "@/components/EditHeroDialog.vue";
 
-export default {
-  name: "TeamView",
-  components: { EditHeroDialog, ConfirmDialog, AddHeroDialog },
-  setup() {
-    const store = useStore();
-    const selectedHero = ref({ publicName: "", realName: "", powers: [] });
+// Setup router
+const router = useRouter();
 
-    const CurrentTeam = computed(() => store.state.general.CurrentTeam);
-    const HeroPowerTypes = computed(() => store.state.general.HeroPowerTypes);
+// Setup store
+const generalStore = useGeneralStore();
 
-    const openAddDialog = () => {
-      this.$refs.AddHeroDialog.displayDialog();
-    };
+// Setup refs
+const selectedHero = ref({ publicName: "", realName: "", powers: [] });
+const addHeroDialogRef = ref(null);
+const editHeroDialogRef = ref(null);
+const confirmDialogRef = ref(null);
 
-    const removeHero = async (hero) => {
-      const data = {
-        idTeam: CurrentTeam.value._id,
-        heroes: [hero._id],
-      };
-      this.$refs.ConfirmDialog.displayDialog(
-        "Suppression",
-        "Voulez-vous vraiment enlever de l'équipe le héros " + hero.publicName,
-        () => {
-          store.dispatch("general/removeHeroesFromTeam", data);
-        }
-      );
-    };
+// Setup computed properties
+const CurrentTeam = computed(() => generalStore.CurrentTeam);
+const HeroPowerTypes = computed(() => generalStore.HeroPowerTypes);
 
-    const selectHero = (hero) => {
-      selectedHero.value = hero;
-      this.$refs.EditHeroDialog.displayDialog();
-    };
+// Methods
+const openAddDialog = () => {
+  addHeroDialogRef.value.displayDialog();
+};
 
-    const update = async (hero) => {
-      hero._id = selectedHero.value._id;
-      await store.dispatch("general/updateHero", hero);
-    };
+const removeHero = async (hero) => {
+  const data = {
+    idTeam: CurrentTeam.value._id,
+    heroes: [hero._id],
+  };
+  
+  confirmDialogRef.value.displayDialog(
+    "Suppression",
+    "Voulez-vous vraiment enlever de l'équipe le héros " + hero.publicName,
+    () => {
+      generalStore.removeHeroesFromTeam(data);
+    }
+  );
+};
 
-    return {
-      selectedHero,
-      CurrentTeam,
-      HeroPowerTypes,
-      openAddDialog,
-      removeHero,
-      selectHero,
-      update,
-    };
-  },
+const selectHero = (hero) => {
+  selectedHero.value = hero;
+  editHeroDialogRef.value.displayDialog();
+};
+
+const update = async (hero) => {
+  hero._id = selectedHero.value._id;
+  await generalStore.updateHero(hero);
 };
 </script>

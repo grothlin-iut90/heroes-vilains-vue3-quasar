@@ -1,16 +1,13 @@
-export default {
-    namespaced: true,
-    state: () => ({
-        OrganisationPassword: "",
-    }),
-    mutations: {
-        setOrganisationPassword(state, password) {
-            state.OrganisationPassword = password;
-        },
+import { defineStore } from 'pinia';
+
+export const useOrganisationPasswordStore = defineStore('organisationPassword', {
+  state: () => ({
+    OrganisationPassword: "",
+  }),
+  
+  actions: {
+    setOrganisationPassword(password) {
+      this.OrganisationPassword = password;
     },
-    actions: {
-        setOrganisationPassword({ commit }, password) {
-            commit("setOrganisationPassword", password);
-        },
-    },
-};
+  },
+});

@@ -1,44 +1,3 @@
-<script>
-import { useStore } from "vuex";
-import { computed } from "vue";
-import OrganisationList from "@/components/OrganisationsList.vue";
-import NewOrganisationDialog from "@/components/NewOrganisationDialog.vue";
-
-export default {
-  name: "OrganisationsView",
-  components: { AddOrganisationDialog: NewOrganisationDialog, OrganisationList },
-  setup() {
-    const store = useStore();
-
-    const organisationNames = computed(() => store.state.general.OrganisationNames);
-
-    const sortedOrganisationNames = computed(() =>
-      organisationNames.value.sort((a, b) => a.name.localeCompare(b.name))
-    );
-
-    const getOrganisations = () => {
-      store.dispatch("general/getOrganisations");
-    };
-
-    const newOrganisation = () => {
-      addOrgDialog.value.displayDialog();
-    };
-
-    const addOrgDialog = ref(null);
-
-    return {
-      sortedOrganisationNames,
-      getOrganisations,
-      newOrganisation,
-      addOrgDialog,
-    };
-  },
-  mounted() {
-    this.getOrganisations();
-  },
-};
-</script>
-
 <template>
   <div>
     <v-container>
@@ -47,6 +6,36 @@ export default {
       <OrganisationList :organisation-names="sortedOrganisationNames" />
     </v-container>
 
-    <AddOrganisationDialog ref="addOrgDialog" />
+    <AddOrganisationDialog ref="addOrgDialogRef" />
   </div>
 </template>
+
+<script setup>
+import { computed, ref, onMounted } from "vue";
+import OrganisationList from "@/components/OrganisationsList.vue";
+import NewOrganisationDialog from "@/components/NewOrganisationDialog.vue";
+import { useGeneralStore } from "@/store/modules/general";
+
+const generalStore = useGeneralStore();
+const addOrgDialogRef = ref(null);
+
+// Computed properties
+const organisationNames = computed(() => generalStore.OrganisationNames);
+const sortedOrganisationNames = computed(() =>
+  organisationNames.value.sort((a, b) => a.name.localeCompare(b.name))
+);
+
+// Methods
+const getOrganisations = () => {
+  generalStore.getOrganisations();
+};
+
+const newOrganisation = () => {
+  addOrgDialogRef.value.displayDialog();
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  getOrganisations();
+});
+</script>

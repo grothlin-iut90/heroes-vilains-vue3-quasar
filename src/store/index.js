@@ -1,14 +1,17 @@
-import { createStore } from "vuex";
-import auth from "./modules/auth";
-import general from "./modules/general";
-import errors from "./modules/errors";
-import secret from "./modules/secret";
+import { createPinia } from 'pinia';
 
-export default createStore({
-    modules: {
-        general,
-        errors,
-        secret,
-        auth,
-    },
-});
+import { useAuthStore } from './modules/auth';
+import { useGeneralStore } from './modules/general';
+import { useErrorStore } from './modules/errors';
+import { useOrganisationPasswordStore } from './modules/secret';
+
+const pinia = createPinia();
+
+export default pinia;
+
+export {
+  useAuthStore,
+  useGeneralStore,
+  useErrorStore,
+  useOrganisationPasswordStore
+};

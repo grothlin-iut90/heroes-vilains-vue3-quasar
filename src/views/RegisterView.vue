@@ -1,58 +1,3 @@
-<script>
-import { useStore } from "vuex";
-import { ref } from "vue";
-import { captchaSiteKey } from "@/commons/config";
-import { VueRecaptcha } from "vue-recaptcha";
-
-export default {
-  name: "RegisterView",
-  components: { VueRecaptcha },
-  setup() {
-    const store = useStore();
-
-    const login = ref("");
-    const password = ref("");
-    const hero = ref("");
-    const captchaToken = ref(null);
-    const valid = ref(false);
-
-    const onCaptchaVerified = (token) => {
-      captchaToken.value = token;
-    };
-
-    const onCaptchaExpired = () => {
-      captchaToken.value = null;
-    };
-
-    const submit = async () => {
-      const result = await store.dispatch("auth/registerUser", {
-        login: login.value,
-        password: password.value,
-        hero: hero.value,
-        captchaToken: captchaToken.value,
-      });
-      if (result.error === 0) {
-        router.push("/login");
-      } else {
-        console.log(result.data);
-      }
-    };
-
-    return {
-      login,
-      password,
-      hero,
-      captchaToken,
-      valid,
-      captchaSiteKey,
-      onCaptchaVerified,
-      onCaptchaExpired,
-      submit,
-    };
-  },
-};
-</script>
-
 <template>
   <v-container>
     <h1>Register</h1>
@@ -70,3 +15,42 @@ export default {
     </v-form>
   </v-container>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { VueRecaptcha } from "vue-recaptcha";
+import { captchaSiteKey } from "@/commons/config";
+import { useAuthStore } from "@/store/modules/auth";
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+const login = ref("");
+const password = ref("");
+const hero = ref("");
+const captchaToken = ref(null);
+const valid = ref(false);
+
+const onCaptchaVerified = (token) => {
+  captchaToken.value = token;
+};
+
+const onCaptchaExpired = () => {
+  captchaToken.value = null;
+};
+
+const submit = async () => {
+  const result = await authStore.registerUser({
+    login: login.value,
+    password: password.value,
+    hero: hero.value,
+    captchaToken: captchaToken.value,
+  });
+  if (result.error === 0) {
+    router.push("/login");
+  } else {
+    console.log(result.data);
+  }
+};
+</script>
