@@ -16,30 +16,18 @@
   </v-app>
 </template>
 
-<script>
+<script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import NavBar from "@/components/NavBar.vue";
+import { useErrorStore } from "@/store/modules/errors";
 
-export default {
-  name: "App",
-  components: { NavBar },
-  setup() {
-    const store = useStore();
+const errorStore = useErrorStore();
 
-    const errorMessage = computed(() => store.state.errors.errorMessage);
-    const errorDialog = computed(() => !!store.state.errors.errorMessage);
+const errorMessage = computed(() => errorStore.errorMessage);
+const errorDialog = computed(() => !!errorStore.errorMessage);
 
-    const clearError = () => {
-      store.dispatch("errors/clearError");
-    };
-
-    return {
-      errorMessage,
-      errorDialog,
-      clearError,
-    };
-  },
+const clearError = () => {
+  errorStore.clearError();
 };
 </script>
 
